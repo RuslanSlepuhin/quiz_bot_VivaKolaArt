@@ -88,8 +88,8 @@ class BotHelper():
         markup = InlineKeyboardMarkup(row_width=4)
         answer_options = self.quiz_dict[question_number]['answers']
         for i in answer_options:
-
-            button = InlineKeyboardButton(i, callback_data=str(i)) if answer_options.index(i) != user_answered else InlineKeyboardButton(f"✅ {i}", callback_data=str(i))
+            index = answer_options.index(i)
+            button = InlineKeyboardButton(i, callback_data=str(i)) if index != user_answered else InlineKeyboardButton(f"✅ {i}", callback_data=str(i))
             buttons_list.append(button) if row else markup.add(button)
         if row:
             markup.add(*buttons_list)
