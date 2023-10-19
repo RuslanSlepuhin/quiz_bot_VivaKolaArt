@@ -7,7 +7,7 @@ try:
     config.read("./Settings/config.ini")
 except:
     config.read("./../Settings/config.ini")
-token = config['Bot']['token']
+token = config['Localmachine_Bot']['token']
 
 # if __name__ == '__main__':
 bot_handlers = BotHandlers(token)

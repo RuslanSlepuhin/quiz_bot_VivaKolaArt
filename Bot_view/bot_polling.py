@@ -96,8 +96,17 @@ class BotHandlers:
 
                 index = self.callbacks.index(callback.data)
                 print("index=", index)
+
+                # -------------------------------------
+                self.markup = await self.helper.compose_answer_keyboard(question_number=self.question_number, user_answered=index)
+                self.message = self.helper.quiz_dict[self.question_number]['question']
+                message_id = self.messages_list[-1].message_id
+                await self.bot.edit_message_text(f"{self.message}", callback.message.chat.id, message_id, reply_markup=self.markup)
+                pass
+                # -------------------------------------
+
                 if self.helper.quiz_dict[self.question_number]['right'][index]: # in variables.relevant_values:
-                    msg = await self.bot.send_message(callback.message.chat.id, "Ваш ответ принят")
+                    # msg = await self.bot.send_message(callback.message.chat.id, "Ваш ответ принят")
                     # await asyncio.sleep(0.5)
                     # await msg.delete()
                     await self.clean_bot_chat()
@@ -147,7 +156,7 @@ class BotHandlers:
         elif self.question_number > len(self.helper.quiz_dict) - 1:
 
             #YOU WIN
-            self.messages_list.append(await self.bot.send_message(message.chat.id, "Формируем Ваш номер"))
+            # self.messages_list.append(await self.bot.send_message(message.chat.id, "Формируем Ваш номер"))
             await self.helper.insert_next_number(message)
             await self.clean_bot_chat()
             self.messages_list.append(await self.bot.send_message(message.chat.id, self.final_object['final_message'], parse_mode='html', reply_markup=self.final_object['markup']))

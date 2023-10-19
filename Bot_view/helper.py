@@ -83,12 +83,13 @@ class BotHelper():
 
         return {'response': True, 'quiz_dict': self.quiz_dict, 'preview_object': self.preview_object, 'final_object': self.final_message_object}
 
-    async def compose_answer_keyboard(self, question_number, row=False):
+    async def compose_answer_keyboard(self, question_number, row=False, user_answered=None):
         buttons_list=[]
         markup = InlineKeyboardMarkup(row_width=4)
         answer_options = self.quiz_dict[question_number]['answers']
         for i in answer_options:
-            button = InlineKeyboardButton(i, callback_data=str(i))
+
+            button = InlineKeyboardButton(i, callback_data=str(i)) if answer_options.index(i) != user_answered else InlineKeyboardButton(f"✅ {i}", callback_data=str(i))
             buttons_list.append(button) if row else markup.add(button)
         if row:
             markup.add(*buttons_list)
