@@ -43,9 +43,9 @@ class DatabaseMethods:
     def connect(self):
         config = configparser.ConfigParser()
         try:
-            config.read("./settings/config.ini")
+            config.read("./Settings/config.ini")
         except:
-            config.read("./../settings/config.ini")
+            config.read("./../Settings/config.ini")
 
 
         database = config['Database']['database']
