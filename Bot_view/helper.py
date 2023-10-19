@@ -129,20 +129,25 @@ class BotHelper():
         datab.create_users_database()
 
     async def insert_next_number(self, message):
-
-        #get max number value from database
+        # check the user exists in database
         datab = DatabaseMethods()
-        max_number = datab.get_max_number()
-
-        #increase +1
-        if not max_number:
-            max_number = 12001
+        response = datab.get_from_database(condition=f"WHERE user_id={message.chat.id}")
+        if response and type(response) is list:
+            response = await self.get_one_dict_from_database_response(response[0])
+            max_number = response['quiz_number']
         else:
-            max_number += 1
-        print('next_max_number=', max_number)
-        #add to database
-        datab.add_user_info(user_data={'quiz_number': max_number}, conditions=f"WHERE user_id={message.chat.id}")
-        print('next_max_number=', max_number)
+            #get max number value from database
+            max_number = datab.get_max_number()
+
+            #increase +1
+            if not max_number:
+                max_number = 12001
+            else:
+                max_number += 1
+            print('next_max_number=', max_number)
+            #add to database
+            datab.add_user_info(user_data={'quiz_number': max_number}, conditions=f"WHERE user_id={message.chat.id}")
+            print('next_max_number=', max_number)
 
         #insert to the final text
         final_message = self.final_message_object['final_message'].replace('***', f"<b>{str(max_number)}</b>")
@@ -154,6 +159,12 @@ class BotHelper():
             users_dict[database_fields[i]] = []
             for element in response:
                 users_dict[database_fields[i]].append(element[i])
+        return users_dict
+
+    async def get_one_dict_from_database_response(self, response):
+        users_dict = {}
+        for i in range(0, len(database_fields)):
+            users_dict[database_fields[i]] = response[i]
         return users_dict
 
     async def get_users(self):
