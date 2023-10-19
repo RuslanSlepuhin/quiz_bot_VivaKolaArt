@@ -130,6 +130,11 @@ class BotHandlers:
         @self.dp.message_handler(content_types=['text'])
         async def text_message(message):
             if message.text == 'Пройти квиз':
+                try:
+                    await self.bot.delete_message(message.chat.id, message.message_id)
+                except Exception as ex:
+                    print('Cant delete the message Пройти тест', ex)
+
                 await self.message_for_delete.delete()
                 await self.start_quiz(message)
             else:
