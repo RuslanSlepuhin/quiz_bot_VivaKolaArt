@@ -139,7 +139,7 @@ class BotHelper():
             max_number = 12001
         else:
             max_number += 1
-
+        print('next_max_number=', max_number)
         #add to database
         datab.add_user_info(user_data={'quiz_number': max_number}, conditions=f"WHERE user_id={message.chat.id}")
 
