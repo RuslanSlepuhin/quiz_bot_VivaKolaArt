@@ -158,6 +158,7 @@ class BotHandlers:
 
             #YOU WIN
             # self.messages_list.append(await self.bot.send_message(message.chat.id, "Формируем Ваш номер"))
+            self.callbacks = []
             await self.helper.insert_next_number(message)
             await self.clean_bot_chat()
             self.messages_list.append(await self.bot.send_message(message.chat.id, self.final_object['final_message'], parse_mode='html', reply_markup=self.final_object['markup']))
