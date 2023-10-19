@@ -4,9 +4,9 @@ from Bot_view.bot_polling import BotHandlers
 
 config = configparser.ConfigParser()
 try:
-    config.read("./settings/config.ini")
+    config.read("./Settings/config.ini")
 except:
-    config.read("./../settings/config.ini")
+    config.read("./../Settings/config.ini")
 token = config['Bot']['token']
 
 if __name__ == '__main__':
