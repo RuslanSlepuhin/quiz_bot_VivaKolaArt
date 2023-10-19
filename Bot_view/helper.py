@@ -145,8 +145,8 @@ class BotHelper():
         print('next_max_number=', max_number)
 
         #insert to the final text
-        self.final_message_object['final_message'] = self.final_message_object['final_message'].replace('***', f"<b>{str(max_number)}</b>")
-        pass
+        final_message = self.final_message_object['final_message'].replace('***', f"<b>{str(max_number)}</b>")
+        return final_message
 
     async def get_dict_from_database_response(self, response):
         users_dict = {}

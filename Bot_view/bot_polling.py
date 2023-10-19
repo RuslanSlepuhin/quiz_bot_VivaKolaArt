@@ -176,9 +176,9 @@ class BotHandlers:
             #YOU WIN
             # self.messages_list.append(await self.bot.send_message(message.chat.id, "Формируем Ваш номер"))
             self.callbacks = []
-            await self.helper.insert_next_number(message)
+            final_message = await self.helper.insert_next_number(message)
             await self.clean_bot_chat()
-            self.messages_list.append(await self.bot.send_message(message.chat.id, self.final_object['final_message'], parse_mode='html', reply_markup=self.final_object['markup']))
+            self.messages_list.append(await self.bot.send_message(message.chat.id, final_message, parse_mode='html', reply_markup=self.final_object['markup']))
         else:
             self.messages_list.append(await self.bot.send_message(message.chat.id, "SOMETHING is WRONG!"))
 
