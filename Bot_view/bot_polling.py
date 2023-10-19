@@ -26,6 +26,7 @@ class BotHandlers:
         self.response = {}
         self.callbacks = []
         self.custom_text_user = []
+        self.message_for_delete = None
 
     async def handlers(self):
         await self.helper.create_database()
@@ -134,8 +135,11 @@ class BotHandlers:
                     await self.bot.delete_message(message.chat.id, message.message_id)
                 except Exception as ex:
                     print('Cant delete the message Пройти тест', ex)
+                try:
+                    await self.message_for_delete.delete()
+                except Exception as ex:
+                    print(ex)
 
-                await self.message_for_delete.delete()
                 await self.start_quiz(message)
             else:
                 await self.bot.delete_message(message.chat.id, message.message_id)
