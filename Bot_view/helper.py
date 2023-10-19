@@ -142,6 +142,7 @@ class BotHelper():
         print('next_max_number=', max_number)
         #add to database
         datab.add_user_info(user_data={'quiz_number': max_number}, conditions=f"WHERE user_id={message.chat.id}")
+        print('next_max_number=', max_number)
 
         #insert to the final text
         self.final_message_object['final_message'] = self.final_message_object['final_message'].replace('***', f"<b>{str(max_number)}</b>")
