@@ -3,6 +3,8 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+
 from Database.database_methods import DatabaseMethods
 from Bot_view.helper import BotHelper
 
@@ -68,7 +70,9 @@ class BotHandlers:
             await state.finish()
             datab = DatabaseMethods()
             datab.add_user_info(user_data=self.user_object, conditions=f"WHERE user_id={message.from_user.id}")
-            await self.start_quiz(message)
+
+            await self.show_start_quiz_bar_button(message)
+
 
         @self.dp.message_handler(commands=['get_users'])
         async def get_users(message: types.Message):
@@ -125,8 +129,12 @@ class BotHandlers:
 
         @self.dp.message_handler(content_types=['text'])
         async def text_message(message):
-            await self.bot.delete_message(message.chat.id, message.message_id)
-            print('it was the user custom text')
+            if message.text == 'Пройти квиз':
+                await self.message_for_delete.delete()
+                await self.start_quiz(message)
+            else:
+                await self.bot.delete_message(message.chat.id, message.message_id)
+                print('it was the user custom text')
 
         @self.dp.message_handler(content_types=['document'])
         async def get_document(message: types.Message):
@@ -201,3 +209,14 @@ class BotHandlers:
                 await self.bot.send_document(message.chat.id, file)
             except Exception as ex:
                 print("def send_file", ex)
+
+    async def show_start_quiz_bar_button(self, message):
+
+        keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+        button = KeyboardButton("Пройти квиз")
+        keyboard.add(button)
+        text = "🎨 А теперь небольшой квиз из трёх вопросов, после которого вы получите свой порядковый номер\n\n" \
+               "✅Нажми кнопку «Пройти квиз»👇🏼"
+        self.message_for_delete = await self.bot.send_message(message.chat.id, text, reply_markup=keyboard)
+
+
