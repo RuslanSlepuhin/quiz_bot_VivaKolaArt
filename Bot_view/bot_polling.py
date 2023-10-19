@@ -53,8 +53,9 @@ class BotHandlers:
                 await Custom_userData.custom_email.set()
                 self.messages_list.append(await self.bot.send_message(
                     message.chat.id,
-                    'Адрес электронный почты\n\n❗️Убедитесь, что оставили корректный и актуальный адрес. '
-                    'Именно на указанный адрес придёт информация в случае выигрыша !'
+                    '📝Укажите адрес электронный почты\n\n'
+                    '❗️Убедитесь, что оставили корректный и актуальный адрес.\n'
+                    '❗️Именно на указанный адрес придёт информация в случае выигрыша !'
                 )
                                           )
         @self.dp.message_handler(state=Custom_userData.custom_email)
@@ -139,7 +140,7 @@ class BotHandlers:
 
         async def collect_user_custom_info(message):
             await Custom_userData.custom_username.set()
-            self.messages_list.append(await self.bot.send_message(message.chat.id, "Ваше имя"))
+            self.messages_list.append(await self.bot.send_message(message.chat.id, "📝Укажите Ваше имя"))
 
         # await executor.start_polling(self.dp, skip_updates=True)
         await self.dp.start_polling(self.bot)
