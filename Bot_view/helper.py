@@ -1,4 +1,6 @@
 import random
+from datetime import datetime
+
 import pandas as pd
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from Variables import variables
@@ -16,7 +18,7 @@ class BotHelper():
         try:
             excel_data_df = pd.read_excel('./bot_road_map.xlsx', sheet_name='Quiz map')
         except Exception as ex:
-            print(ex)
+            print(f'[{datetime.now().strftime("%H:%M")}] {ex}')
             return {'response': False, 'quiz_dict': {}, 'error': ex}
 
         if 'Questions' in excel_data_df.columns and 'Answers' in excel_data_df.columns \
@@ -64,7 +66,7 @@ class BotHelper():
         try:
             excel_data_df = pd.read_excel('./bot_road_map.xlsx', sheet_name='Preview message')
         except Exception as ex:
-            print(ex)
+            print(f'[{datetime.now().strftime("%H:%M")}] {ex}')
             return {'response': False, 'quiz_dict': {}, 'error': ex}
         self.preview_object['preview_message'] = excel_data_df['preview_message'].tolist()[0]
         button = InlineKeyboardButton(excel_data_df['start_button'].tolist()[0], callback_data='start_after_preview')
@@ -74,7 +76,7 @@ class BotHelper():
         try:
             excel_data_df = pd.read_excel('./bot_road_map.xlsx', sheet_name='Final message')
         except Exception as ex:
-            print(ex)
+            print(f'[{datetime.now().strftime("%H:%M")}] {ex}')
             return {'response': False, 'quiz_dict': {}, 'error': ex}
         self.final_message_object['final_message'] = excel_data_df['final_message'].tolist()[0]
         button = InlineKeyboardButton(excel_data_df['button'].tolist()[0], url=excel_data_df['button_link'].tolist()[0])
@@ -144,13 +146,13 @@ class BotHelper():
                 max_number = 12001
             else:
                 max_number += 1
-            print('next_max_number=', max_number)
+
             #add to database
             datab.add_user_info(user_data={'quiz_number': max_number}, conditions=f"WHERE user_id={message.chat.id}")
-            print('next_max_number=', max_number)
 
         #insert to the final text
         final_message = self.final_message_object['final_message'].replace('***', f"<b>{str(max_number)}</b>")
+        print(f'[{datetime.now().strftime("%H:%M")}] QUIZ NUMBER: {max_number}')
         return final_message
 
     async def get_dict_from_database_response(self, response):
@@ -174,6 +176,6 @@ class BotHelper():
         df = pd.DataFrame(users_list)
         try:
             df.to_excel(f'./Report/users_report.xlsx', sheet_name='Sheet1')
-            print('Report has been created')
+            print(f'[{datetime.now().strftime("%H:%M")}] Report has been created')
         except Exception as e:
-            print(f"Something is wrong: {str(e)}")
+            print(f'[{datetime.now().strftime("%H:%M")}] Something is wrong: {str(e)}')

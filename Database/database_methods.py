@@ -1,4 +1,6 @@
 import configparser
+from datetime import datetime
+
 import psycopg2
 
 
@@ -35,9 +37,9 @@ class DatabaseMethods:
         with con:
             try:
                 cur.execute(query)
-                print('Table users has been created')
+                print(f'[{datetime.now().strftime("%H:%M")}] Table users has been created')
             except Exception as ex:
-                print("def create_users_database", ex)
+                print(f'[{datetime.now().strftime("%H:%M")}] def create_users_database', ex)
         con.close()
 
     def connect(self):
@@ -72,7 +74,7 @@ class DatabaseMethods:
                 cur.execute(query)
                 return cur.fetchall()
             except Exception as ex:
-                print('def get_from_database', ex)
+                print(f'[{datetime.now().strftime("%H:%M")}] def get_from_database', ex)
         con.close()
         return False
 
@@ -83,10 +85,10 @@ class DatabaseMethods:
         with self.connect():
             try:
                 cur.execute("SELECT MAX(quiz_number) FROM users")
-                print("MAX number has been found")
+                print(f'[{datetime.now().strftime("%H:%M")}] MAX number has been found')
                 return (cur.fetchall()[0][0])
             except Exception as ex:
-                print("def get_max_number", ex)
+                print(f'[{datetime.now().strftime("%H:%M")}] def get_max_number', ex)
         con.close()
 
 
@@ -101,10 +103,10 @@ class DatabaseMethods:
             with con:
                 try:
                     cur.execute(query)
-                    print('user has been created')
+                    print(f'[{datetime.now().strftime("%H:%M")}] user has been created')
                     return True
                 except Exception as ex:
-                    print('def create_user_info', ex)
+                    print(f'[{datetime.now().strftime("%H:%M")}] def create_user_info', ex)
             con.close()
         return False
 
@@ -123,10 +125,10 @@ class DatabaseMethods:
         with con:
             try:
                 cur.execute(query)
-                print("user has been upgraded")
+                print(f'[{datetime.now().strftime("%H:%M")}] user has been upgraded')
                 return True
             except Exception as ex:
-                print('def add_user_number', ex)
+                print(f'[{datetime.now().strftime("%H:%M")}] def add_user_number', ex)
         con.close()
         return False
 

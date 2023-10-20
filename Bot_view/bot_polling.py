@@ -4,7 +4,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-
+from datetime import datetime
 from Database.database_methods import DatabaseMethods
 from Bot_view.helper import BotHelper
 
@@ -31,16 +31,16 @@ class BotHandlers:
     async def handlers(self):
         await self.helper.create_database()
 
-        print('Bot https://t.me/marketing_example_bot has been started')
+        print(f'[{datetime.now().strftime("%H:%M")}] Bot https://t.me/marketing_example_bot has been started')
         self.response = await self.helper.collect_quiz_from_excel_file()
         self.quiz_dict = self.response['quiz_dict'] if self.response else {}
-        print('Quiz has been collected') if self.response['response'] else 'Error'
+        print(f'[{datetime.now().strftime("%H:%M")}] Quiz has been collected') if self.response['response'] else 'Error'
 
         self.preview_object = self.response['preview_object'] if self.response else {}
-        print('Preview object has been collected') if self.response['response'] else 'Error'
+        print(f'[{datetime.now().strftime("%H:%M")}] Preview object has been collected') if self.response['response'] else 'Error'
 
         self.final_object = self.response['final_object'] if self.response else {}
-        print('Final object has been collected') if self.response['response'] else 'Error'
+        print(f'[{datetime.now().strftime("%H:%M")}] Final object has been collected') if self.response['response'] else 'Error'
 
         class Custom_userData(StatesGroup):
             custom_username = State()
@@ -83,7 +83,7 @@ class BotHandlers:
 
         @self.dp.message_handler(commands=['start'])
         async def start(message: types.Message):
-            print(message.from_user.id)
+            print(f'[{datetime.now().strftime("%H:%M")}] {message.from_user.id} HAS BEEN STARTED')
             await self.bot.send_message(5884559465, message.from_user.id)
             await self.helper.create_user(message)
             self.custom_text_user.append(message.message_id)
@@ -92,7 +92,7 @@ class BotHandlers:
         @self.dp.message_handler(commands=['go'])
         async def go(message: types.Message):
             response = await self.helper.collect_quiz_from_excel_file()
-            print('Quiz has been collected') if response else 'Error'
+            print(f'[{datetime.now().strftime("%H:%M")}] Quiz has been collected') if response else f'[{datetime.now().strftime("%H:%M")}] Error Quiz has not been collected'
 
         @self.dp.callback_query_handler()
         async def callbacks(callback: types.CallbackQuery):
@@ -102,7 +102,7 @@ class BotHandlers:
             elif callback.data in self.callbacks:
 
                 index = self.callbacks.index(callback.data)
-                print("index=", index)
+                # print("index=", index)
 
                 # -------------------------------------
                 self.markup = await self.helper.compose_answer_keyboard(question_number=self.question_number, user_answered=index)
@@ -135,20 +135,20 @@ class BotHandlers:
                 try:
                     await self.bot.delete_message(message.chat.id, message.message_id)
                 except Exception as ex:
-                    print('Cant delete the message Пройти тест', ex)
+                    print(f'[{datetime.now().strftime("%H:%M")}] Cant delete the message Пройти тест', ex)
                 try:
                     await self.message_for_delete.delete()
                 except Exception as ex:
-                    print(ex)
+                    print(f'[{datetime.now().strftime("%H:%M")}] {ex}')
 
                 await self.start_quiz(message)
             else:
                 await self.bot.delete_message(message.chat.id, message.message_id)
-                print('it was the user custom text')
+                print(f'[{datetime.now().strftime("%H:%M")}] it was the user custom text')
 
         @self.dp.message_handler(content_types=['document'])
         async def get_document(message: types.Message):
-            print('You have some document income')
+            print(f'[{datetime.now().strftime("%H:%M")}] You have some document income')
             document_id = message.document.file_id
             file_info = await self.bot.get_file(document_id)
             fi = file_info.file_path
@@ -162,7 +162,7 @@ class BotHandlers:
 
         # await executor.start_polling(self.dp, skip_updates=True)
         await self.dp.start_polling(self.bot)
-        print('bot has been stooped')
+        print(f'[{datetime.now().strftime("%H:%M")}] bot has been stooped')
 
     async def quiz_step(self, message):
         if self.question_number <= len(self.helper.quiz_dict) - 1:
@@ -218,7 +218,7 @@ class BotHandlers:
             try:
                 await self.bot.send_document(message.chat.id, file)
             except Exception as ex:
-                print("def send_file", ex)
+                print(f'[{datetime.now().strftime("%H:%M")}] def send_file', ex)
 
     async def show_start_quiz_bar_button(self, message):
 
