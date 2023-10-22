@@ -79,6 +79,8 @@ class DatabaseMethods:
         return False
 
     def get_max_number(self):
+        start_number = 12001
+
         con = self.connect()
         cur = con.cursor()
 
