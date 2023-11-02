@@ -108,8 +108,13 @@ class BotHandlers:
                 self.markup = await self.helper.compose_answer_keyboard(question_number=self.question_number, user_answered=index)
                 self.message = self.helper.quiz_dict[self.question_number]['question']
                 message_id = self.messages_list[-1].message_id
-                await self.bot.edit_message_text(f"{self.message}", callback.message.chat.id, message_id, reply_markup=self.markup)
+                try:
+                    await self.bot.edit_message_text(f"{self.message}", callback.message.chat.id, message_id, reply_markup=self.markup)
+                except Exception as ex:
+                    self.messages_list.append(await self.bot.send_message(callback.message.chat.id, f"{self.message}", reply_markup=self.markup))
+                    # await self.bot.send_message(callback.message.chat.id, "Произошла непредвиденная ошибка, пожалуйста, перезапустите бот /start")
                 pass
+
                 # -------------------------------------
 
                 if self.helper.quiz_dict[self.question_number]['right'][index]: # in variables.relevant_values:
