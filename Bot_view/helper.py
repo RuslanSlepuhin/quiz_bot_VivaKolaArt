@@ -190,3 +190,7 @@ class BotHelper():
             print(f'[{datetime.now().strftime("%H:%M")}] Report has been created')
         except Exception as e:
             print(f'[{datetime.now().strftime("%H:%M")}] Something is wrong: {str(e)}')
+
+    async def get_empty_users(self):
+        datab = DatabaseMethods()
+        return datab.get_from_database(condition="WHERE quiz_number IS NULL")

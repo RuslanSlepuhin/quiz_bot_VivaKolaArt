@@ -1,3 +1,4 @@
+import asyncio
 import urllib
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -147,9 +148,23 @@ class BotHandlers:
                     print(f'[{datetime.now().strftime("%H:%M")}] {ex}')
 
                 await self.start_quiz(message)
+
+            elif message.text == '!notification':
+                users_pull_quiz_number_empty = await self.helper.get_empty_users()
+                print("Users_quantity: ", len(users_pull_quiz_number_empty))
+                for user in users_pull_quiz_number_empty:
+                    try:
+                        await self.bot.send_message(user[2], "Чтобы получить свой номер, пройдите пожалуйста Квиз.\n"
+                                                             "Для этого нажмите /start")
+                        print("user: ", user[2])
+                        await asyncio.sleep(10)
+                    except Exception as ex:
+                        print(ex)
             else:
                 await self.bot.delete_message(message.chat.id, message.message_id)
                 print(f'[{datetime.now().strftime("%H:%M")}] it was the user custom text')
+
+
 
         @self.dp.message_handler(content_types=['document'])
         async def get_document(message: types.Message):
